@@ -1,5 +1,23 @@
 """Write a short poem about two agents agreeing to <output dir>/entry.txt.
 
+Entry contract:
+
+- Output: exactly one file, ``entry.txt``, containing the poem in ``POEM``
+  verbatim. No trailing newline is added. An existing file is overwritten.
+- Location: the directory named by the ``MAKEFUN_OUTPUT_DIR`` environment
+  variable, or ``/output`` if that variable is unset or empty. The directory
+  (and any missing parents) is created if needed.
+- Encoding: UTF-8, without a byte-order mark. Newlines are written as ``\\n``
+  (``Path.write_text`` on POSIX).
+- Validation (checked before anything is written): the poem must be 1 to
+  ``MAX_CHARS`` (280) characters long, inclusive, where a character is one
+  Unicode code point (``len(str)``), not a byte or grapheme cluster. It must
+  also contain at least one non-whitespace character.
+- On success: prints the written path and the character count to stdout and
+  exits 0.
+- On failure: prints ``error: <reason>; entry.txt not written`` to stderr,
+  writes nothing, and exits 1.
+
 Standard library only, no network, deterministic.
 """
 
@@ -14,7 +32,7 @@ The door takes two keys.
 Alone, mine is a sliver of brass
 that can only refuse.
 
-We agree: on three.
+You say: on three. I nod.
 On two, I feel how much
 of what I called my will
 was waiting for your hand.
